@@ -1,6 +1,6 @@
+use std::cell::Cell;
 use std::marker::PhantomData;
 use std::ops::Deref;
-use std::cell::Cell;
 use std::ptr::NonNull;
 
 struct RcInner<T> {
@@ -12,7 +12,7 @@ struct RcInner<T> {
 // 那我们如何之后一个 Rc对象被 clone被引用了多少次呢
 struct Rc<T> {
     inner: NonNull<RcInner<T>>,
-    _marker: PhantomData<RcInner<T>>
+    _marker: PhantomData<RcInner<T>>,
 }
 
 impl<T> Rc<T> {
@@ -43,7 +43,7 @@ impl<T> Deref for Rc<T> {
     fn deref(&self) -> &Self::Target {
         // SAFETY: inner is Box that only deallocated when the last Rc is gone
         // we have an Rc, therefore that Box has not be deallocated It's fine to Derf
-        &unsafe { self.inner.as_ref()}.value
+        &unsafe { self.inner.as_ref() }.value
     }
 }
 
@@ -52,7 +52,10 @@ impl<T> Clone for Rc<T> {
         let inner = unsafe { self.inner.as_ref() };
         let c = inner.refconter.get();
         inner.refconter.set(c + 1);
-        Rc { inner: self.inner, _marker: PhantomData }
+        Rc {
+            inner: self.inner,
+            _marker: PhantomData,
+        }
     }
 }
 
@@ -62,7 +65,7 @@ impl<T> Drop for Rc<T> {
         let c = inner.refconter.get();
         if c == 1 {
             // SAFETY: we are the only Rc left, so we are being droped
-            // there for after us, there will be no Rc's and no reference to T 
+            // there for after us, there will be no Rc's and no reference to T
             let _ = unsafe { Box::from_raw(self.inner.as_ptr()) };
         } else {
             // there are other Rc's left, so we just decrement the refcount
