@@ -1,3 +1,4 @@
+mod channel;
 mod lifetime;
 mod rc;
 mod smart_point;
