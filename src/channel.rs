@@ -52,6 +52,7 @@ impl<T> Sender<T> {
 
 pub struct Reciver<T> {
     shared: Arc<Shared<T>>,
+    buffer: VecDeque<T>
 }
 
 impl<T> Iterator for Reciver<T> {
@@ -65,10 +66,19 @@ impl<T> Iterator for Reciver<T> {
 
 impl<T> Reciver<T> {
     fn recv(&mut self) -> Option<T> {
+        if let Some(t) = self.buffer.pop_front() {
+            return Some(t);
+        }
+
         let mut inner = self.shared.inner.lock().unwrap();
         loop {
             match inner.queue.pop_front() {
-                Some(t) => return Some(t),
+                Some(t) => {
+                    if !inner.queue.is_empty() {
+                        std::mem::swap(&mut self.buffer, &mut inner.queue);
+                    }
+                    return Some(t)
+                },
                 None if inner.senders == 0 => return None,
                 None => {
                     inner = self.shared.available.wait(inner).unwrap();
