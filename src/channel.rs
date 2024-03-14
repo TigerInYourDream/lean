@@ -1,5 +1,6 @@
 use std::{
-    collections::VecDeque, path::Iter, sync::{Arc, Condvar, Mutex}
+    collections::VecDeque,
+    sync::{Arc, Condvar, Mutex},
 };
 
 struct Inner<T> {
@@ -22,8 +23,8 @@ impl<T> Clone for Sender<T> {
         let mut innner = self.shared.inner.lock().unwrap();
         innner.senders += 1;
         drop(innner);
-        Self {    
-            shared: Arc::clone(&self.shared)
+        Self {
+            shared: Arc::clone(&self.shared),
         }
     }
 }
@@ -52,7 +53,7 @@ impl<T> Sender<T> {
 
 pub struct Reciver<T> {
     shared: Arc<Shared<T>>,
-    buffer: VecDeque<T>
+    buffer: VecDeque<T>,
 }
 
 impl<T> Iterator for Reciver<T> {
@@ -62,7 +63,6 @@ impl<T> Iterator for Reciver<T> {
         self.recv()
     }
 }
-
 
 impl<T> Reciver<T> {
     fn recv(&mut self) -> Option<T> {
@@ -77,8 +77,8 @@ impl<T> Reciver<T> {
                     if !inner.queue.is_empty() {
                         std::mem::swap(&mut self.buffer, &mut inner.queue);
                     }
-                    return Some(t)
-                },
+                    return Some(t);
+                }
                 None if inner.senders == 0 => return None,
                 None => {
                     inner = self.shared.available.wait(inner).unwrap();
@@ -126,5 +126,12 @@ mod test {
         drop(tx);
         // let _ = tx;
         assert_eq!(rx.recv(), None);
+    }
+
+    #[test]
+    fn remove_rx() {
+        let (tx, rx) = channel::<i32>();
+        drop(rx);
+        tx.send(12);
     }
 }
