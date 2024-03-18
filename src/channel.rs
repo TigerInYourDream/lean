@@ -20,9 +20,9 @@ pub struct Sender<T> {
 
 impl<T> Clone for Sender<T> {
     fn clone(&self) -> Self {
-        let mut innner = self.shared.inner.lock().unwrap();
-        innner.senders += 1;
-        drop(innner);
+        let mut inner = self.shared.inner.lock().unwrap();
+        inner.senders += 1;
+        drop(inner);
         Self {
             shared: Arc::clone(&self.shared),
         }
