@@ -112,11 +112,14 @@ where
 {
     let mut res = vec![];
     let mut visted = HashSet::new();
-    dfs(&graph,&mut visted, &mut res, start_vertex);
+    dfs(&graph, &mut visted, &mut res, start_vertex);
     res
 }
 
-fn dfs<T>(graph: &GraphAdjList<T>, visted: &mut HashSet<T>, res: &mut Vec<T>, vertex: T)  where T: Hash + PartialEq + Copy + Eq {
+fn dfs<T>(graph: &GraphAdjList<T>, visted: &mut HashSet<T>, res: &mut Vec<T>, vertex: T)
+where
+    T: Hash + PartialEq + Copy + Eq,
+{
     res.push(vertex);
     visted.insert(vertex);
 
