@@ -43,13 +43,12 @@ pub fn merge_sort(nums: &mut [i32], left: usize, right: usize) {
 
     let mid = (left + right) / 2;
     merge_sort(nums, left, mid);
-    merge_sort(nums, mid +1, right);
+    merge_sort(nums, mid + 1, right);
     merge(nums, left, mid, right);
 }
 
 fn merge(nums: &mut [i32], left: usize, mid: usize, right: usize) {
-    let var_name = right - left + 1;
-    let temp_size = var_name;
+    let temp_size = right - left + 1;
     let mut temp = vec![0; temp_size as usize];
 
     let mut i = left;
@@ -87,7 +86,7 @@ fn merge(nums: &mut [i32], left: usize, mid: usize, right: usize) {
 
 #[cfg(test)]
 mod test {
-    use crate::sort::merge_sort;
+    use crate::sort::{merge2, merge_sort};
 
     #[test]
     pub fn test_selection_sort() {
@@ -117,4 +116,47 @@ mod test {
         merge_sort(&mut nums, 0, right);
         println!("归并排序完成后 nums = {:?}", nums);
     }
+
+    #[test]
+    pub fn test_merge2() {
+        let mut nums1 = [1, 3, 9, 11, 12, 15, 16, 17];
+        let mut nums2 = [2, 3, 4, 7, 8, 11, 16, 17];
+        merge2(&mut nums1, &mut nums2);
+    }
+}
+
+pub fn merge2(nums1: &mut [i32], nums2: &mut [i32]) {
+    let (mut i, mut j, mut k) = (0, 0, 0);
+
+    let len1 = nums1.len();
+    let len2 = nums2.len();
+
+    let mut temp = vec![0; len1 + len2];
+    while i < len1 && j < len2 {
+        if nums1[i] <= nums2[j] {
+            temp[k] = nums1[i];
+            i += 1;
+        } else {
+            temp[k] = nums2[j];
+            j += 1;
+        }
+        k += 1;
+    }
+
+    while i < len1 {
+        temp[k] = nums1[i];
+        i += 1;
+        k += 1;
+    }
+
+    while j < len2 {
+        temp[k] = nums2[j];
+        j += 1;
+        k += 1;
+    }
+
+    println!("k = {}", k);
+    println!("sum_len = {}", len1 + len2);
+    println!("temp = {:?}", temp);
+    println!("temp len = {:?}", temp.len());
 }
