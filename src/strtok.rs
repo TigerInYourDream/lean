@@ -1,4 +1,4 @@
-pub fn strtok<'a>(s: &'a mut &'a str, delimiter: char) -> &'a str {
+pub fn strtok<'a, 'b>(s: &'a mut &'b str, delimiter: char) -> &'a str {
     if let Some(n) = s.find(delimiter) {
         let prefix = &s[..n];
         let suffix = &s[(n + delimiter.len_utf8())..];
@@ -26,9 +26,9 @@ mod test {
     fn another_example() {
         // why can that work
         let s = String::new();
-        let mut x: &'static str = "hello world";
-        let mut y /* : &'a str */ = &*s;
-        y = x; /* 'static str --> &'a str */
+        let x: &'static str = "hello world";
+        let mut _y /* : &'a str */ = &*s;
+        _y = x; /* 'static str --> &'a str */
     }
 }
 
