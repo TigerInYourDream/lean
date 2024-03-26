@@ -1,5 +1,6 @@
 #![allow(dead_code)]
 
+mod api_in_rust;
 mod channel;
 mod graph;
 mod lifetime;
