@@ -9,6 +9,7 @@ mod search;
 mod smart_point;
 mod sort;
 mod strtok;
+mod ugly;
 
 pub use lifetime::*;
 pub use smart_point::*;

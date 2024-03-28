@@ -1,4 +1,3 @@
-use core::str;
 use std::{thread::sleep, time::Duration};
 
 const CLEAR: &str = "\x1B[2J\x1B[1:1H";
@@ -83,7 +82,7 @@ where
     type Item = Iter::Item;
     fn next(&mut self) -> Option<Self::Item> {
         print!("{}", CLEAR);
-        self.bound.display(&self);
+        self.bound.display(self);
         self.i += 1;
         self.iter.next()
     }
@@ -116,5 +115,6 @@ mod test {
         // for n in v.iter().progress().with_bound().with_delimiter('<', '>') {
         //     expensive_caculation(n);
         // }
+
     }
-}
+} 
