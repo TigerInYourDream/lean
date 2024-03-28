@@ -20,7 +20,7 @@ where
     type Item = &'heystack str;
     fn next(&mut self) -> Option<Self::Item> {
         let reminder = self.reminder.as_mut()?;
-        if let Some((delimter_start, delimiter_end)) = self.delimiter.find_next(&reminder) {
+        if let Some((delimter_start, delimiter_end)) = self.delimiter.find_next(reminder) {
             let until_delimiter = &reminder[..delimter_start];
             *reminder = &reminder[delimiter_end..];
             Some(until_delimiter)

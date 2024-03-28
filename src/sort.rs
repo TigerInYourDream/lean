@@ -16,9 +16,7 @@ pub fn bubule_sort(nums: &mut [i32]) {
     for i in (0..len).rev() {
         for j in 0..i {
             if nums[j] > nums[j + 1] {
-                let temp = nums[j];
-                nums[j] = nums[j + 1];
-                nums[j + 1] = temp;
+                nums.swap(j, j+1)
             }
         }
     }
@@ -49,7 +47,7 @@ pub fn merge_sort(nums: &mut [i32], left: usize, right: usize) {
 
 fn merge(nums: &mut [i32], left: usize, mid: usize, right: usize) {
     let temp_size = right - left + 1;
-    let mut temp = vec![0; temp_size as usize];
+    let mut temp = vec![0; temp_size];
 
     let mut i = left;
     let mut j = mid + 1;
