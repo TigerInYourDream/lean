@@ -1,7 +1,6 @@
 pub fn nth_ugly_number(n: i32) -> i32 {
     let mut dp = vec![0; n as usize];
     dp[0] = 1;
-
     let mut i2 = 0;
     let mut i3 = 0;
     let mut i5 = 0;
@@ -21,7 +20,6 @@ pub fn nth_ugly_number(n: i32) -> i32 {
 
     dp[n as usize - 1]
 }
-
 
 #[cfg(test)]
 mod test {
