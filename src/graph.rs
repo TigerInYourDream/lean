@@ -41,7 +41,7 @@ impl<T: Hash + PartialEq + Eq + Copy> GraphAdjList<T> {
     }
 
     pub fn remove_edge(&mut self, vertex1: T, vertex2: T) {
-        if  !self.adj_list.contains_key(&vertex1) {
+        if !self.adj_list.contains_key(&vertex1) {
             panic!("vertex1 not exist");
         }
         if !self.adj_list.contains_key(&vertex2) {

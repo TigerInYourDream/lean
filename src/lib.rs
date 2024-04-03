@@ -8,6 +8,7 @@ mod rc;
 mod search;
 mod smart_point;
 mod sort;
+mod state;
 mod strtok;
 mod ugly;
 
