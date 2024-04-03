@@ -16,7 +16,7 @@ pub fn bubule_sort(nums: &mut [i32]) {
     for i in (0..len).rev() {
         for j in 0..i {
             if nums[j] > nums[j + 1] {
-                nums.swap(j, j+1)
+                nums.swap(j, j + 1)
             }
         }
     }

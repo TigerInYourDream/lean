@@ -115,6 +115,5 @@ mod test {
         // for n in v.iter().progress().with_bound().with_delimiter('<', '>') {
         //     expensive_caculation(n);
         // }
-
     }
-} 
+}
