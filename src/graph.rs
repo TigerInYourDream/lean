@@ -106,17 +106,17 @@ pub fn graph_dfs<T>(graph: GraphAdjList<T>, start_vertex: T) -> Vec<T>
 where
     T: Hash + PartialEq + Copy + Eq,
 {
-    let mut res = vec![];
+    let mut result = vec![];
     let mut visted = HashSet::new();
-    dfs(&graph, &mut visted, &mut res, start_vertex);
-    res
+    dfs(&graph, &mut visted, &mut result, start_vertex);
+    result
 }
 
-fn dfs<T>(graph: &GraphAdjList<T>, visted: &mut HashSet<T>, res: &mut Vec<T>, vertex: T)
+fn dfs<T>(graph: &GraphAdjList<T>, visted: &mut HashSet<T>, result: &mut Vec<T>, vertex: T)
 where
     T: Hash + PartialEq + Copy + Eq,
 {
-    res.push(vertex);
+    result.push(vertex);
     visted.insert(vertex);
 
     if let Some(adj_vets) = graph.adj_list.get(&vertex) {
@@ -124,7 +124,7 @@ where
             if visted.contains(&adj_vet) {
                 continue;
             }
-            dfs(graph, visted, res, adj_vet);
+            dfs(graph, visted, result, adj_vet);
         }
     }
 }
