@@ -77,8 +77,42 @@ fn merge(nums: &mut [i32], left: usize, mid: usize, right: usize) {
         k += 1;
     }
 
-    for i in 0..temp_size {
-        nums[left + i] = temp[i as usize];
+    nums[left..(temp_size + left)].copy_from_slice(&temp[..temp_size]);
+}
+
+pub fn merge2(nums1: &mut [i32], nums2: &mut [i32]) {
+    let (mut i, mut j, mut k) = (0, 0, 0);
+
+    let len1 = nums1.len();
+    let len2 = nums2.len();
+
+    let mut temp = vec![0; len1 + len2];
+    while i < len1 && j < len2 {
+        if nums1[i] <= nums2[j] {
+            temp[k] = nums1[i];
+            i += 1;
+        } else {
+            temp[k] = nums2[j];
+            j += 1;
+        }
+        k += 1;
+    }
+
+    while i < len1 {
+        temp[k] = nums1[i];
+        i += 1;
+        k += 1;
+    }
+
+    while j < len2 {
+        temp[k] = nums2[j];
+        j += 1;
+        k += 1;
+
+        println!("k = {}", k);
+        println!("sum_len = {}", len1 + len2);
+        println!("temp = {:?}", temp);
+        println!("temp len = {:?}", temp.len());
     }
 }
 
@@ -121,40 +155,4 @@ mod test {
         let mut nums2 = [2, 3, 4, 7, 8, 11, 16, 17];
         merge2(&mut nums1, &mut nums2);
     }
-}
-
-pub fn merge2(nums1: &mut [i32], nums2: &mut [i32]) {
-    let (mut i, mut j, mut k) = (0, 0, 0);
-
-    let len1 = nums1.len();
-    let len2 = nums2.len();
-
-    let mut temp = vec![0; len1 + len2];
-    while i < len1 && j < len2 {
-        if nums1[i] <= nums2[j] {
-            temp[k] = nums1[i];
-            i += 1;
-        } else {
-            temp[k] = nums2[j];
-            j += 1;
-        }
-        k += 1;
-    }
-
-    while i < len1 {
-        temp[k] = nums1[i];
-        i += 1;
-        k += 1;
-    }
-
-    while j < len2 {
-        temp[k] = nums2[j];
-        j += 1;
-        k += 1;
-    }
-
-    println!("k = {}", k);
-    println!("sum_len = {}", len1 + len2);
-    println!("temp = {:?}", temp);
-    println!("temp len = {:?}", temp.len());
 }
