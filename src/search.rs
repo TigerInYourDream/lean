@@ -7,8 +7,6 @@ pub fn binary_search_insertion(num: &[i32], target: i32) -> usize {
         let mid = i + (j - i) / 2;
         if num[mid] < target {
             i = mid + 1;
-        } else if num[mid] > target {
-            j = mid - 1;
         } else {
             j = mid - 1;
         }
