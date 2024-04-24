@@ -4,6 +4,7 @@ mod api_in_rust;
 mod channel;
 mod graph;
 mod lifetime;
+mod pubtest;
 mod rc;
 mod search;
 mod smart_point;
