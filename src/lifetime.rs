@@ -6,7 +6,7 @@ pub struct StrSplit<'heystack, D> {
 
 impl<'heystack, D> StrSplit<'heystack, D> {
     pub fn new(haystack: &'heystack str, delimiter: D) -> Self {
-    Self {
+        Self {
             reminder: Some(haystack),
             delimiter,
         }
@@ -20,7 +20,7 @@ where
     type Item = &'heystack str;
     fn next(&mut self) -> Option<Self::Item> {
         let reminder = self.reminder.as_mut()?;
-        if let Some((delimter_start, delimiter_end)) = self.delimiter.find_next(&reminder) {
+        if let Some((delimter_start, delimiter_end)) = self.delimiter.find_next(reminder) {
             let until_delimiter = &reminder[..delimter_start];
             *reminder = &reminder[delimiter_end..];
             Some(until_delimiter)
@@ -45,7 +45,7 @@ impl Delimiter for char {
         // charactar char only have 1 lang
         s.char_indices()
             .find(|(_, c)| c == self)
-            .map(|(start, _)| (start, self.len_utf8())) 
+            .map(|(start, _)| (start, self.len_utf8()))
     }
 }
 
