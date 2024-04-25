@@ -118,6 +118,7 @@ mod test {
         let (tx, mut rx) = channel();
         tx.send(42);
         assert_eq!(rx.recv(), Some(42));
+        let a = 13;
     }
 
     #[test]
