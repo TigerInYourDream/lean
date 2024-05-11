@@ -107,7 +107,7 @@ mod test {
     #[test]
     fn test_progress() {
         use super::*;
-        for n in (0..).progress() {
+        for n in (0..3).progress() {
             expensive_caculation(&n)
         }
 
