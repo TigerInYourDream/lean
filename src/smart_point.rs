@@ -28,7 +28,7 @@ impl<T> Cell<T> {
 pub enum RefSate {
     Unshare,
     Share(isize),
-    Exclsive,
+    Exclusive,
 }
 
 /// implied by UnsafeCell
@@ -59,13 +59,13 @@ impl<T> RefCell<T> {
                 Some(Ref { refcell: self })
             }
 
-            RefSate::Exclsive => None,
+            RefSate::Exclusive => None,
         }
     }
 
     pub fn borrow_mut(&self) -> Option<RefMut<'_, T>> {
         if let RefSate::Unshare = self.state.get() {
-            self.state.set(RefSate::Exclsive);
+            self.state.set(RefSate::Exclusive);
             Some(RefMut { refcell: self })
         } else {
             None
@@ -91,7 +91,7 @@ impl<T> Deref for Ref<'_, T> {
 impl<'reference, T> Drop for Ref<'reference, T> {
     fn drop(&mut self) {
         match self.refcell.state.get() {
-            RefSate::Unshare | RefSate::Exclsive => unreachable!(),
+            RefSate::Unshare | RefSate::Exclusive => unreachable!(),
             RefSate::Share(1) => {
                 self.refcell.state.set(RefSate::Unshare);
             }
@@ -117,7 +117,7 @@ impl<T> DerefMut for RefMut<'_, T> {
         // safety
         // a RefMut is only created if on other reference been given out
         // once is give out the state is set Exclusive so NO future reference where give out
-        // so we have exclusive lease on inner value, so mutal reference is fine
+        // so we have exclusive lease on inner value, so mutual reference is fine
         unsafe { &mut *self.refcell.value.get() }
     }
 }
@@ -126,7 +126,7 @@ impl<'reference, T> Drop for RefMut<'reference, T> {
     fn drop(&mut self) {
         match self.refcell.state.get() {
             RefSate::Unshare | RefSate::Share(_) => unreachable!(),
-            RefSate::Exclsive => {
+            RefSate::Exclusive => {
                 self.refcell.state.set(RefSate::Unshare);
             }
         }

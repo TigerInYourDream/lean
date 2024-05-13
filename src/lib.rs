@@ -5,6 +5,7 @@ mod channel;
 mod enumdispatch;
 mod graph;
 mod lifetime;
+mod raindrop;
 mod rc;
 mod search;
 mod smart_point;
@@ -14,4 +15,3 @@ mod strtok;
 mod ugly;
 
 pub use lifetime::*;
-

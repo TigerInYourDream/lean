@@ -22,43 +22,6 @@
             },
             "args": [],
             "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug executable 'lean'",
-            "cargo": {
-                "args": [
-                    "build",
-                    "--bin=lean",
-                    "--package=lean"
-                ],
-                "filter": {
-                    "name": "lean",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug unit tests in executable 'lean'",
-            "cargo": {
-                "args": [
-                    "test",
-                    "--no-run",
-                    "--bin=lean",
-                    "--package=lean"
-                ],
-                "filter": {
-                    "name": "lean",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
         }
     ]
 }

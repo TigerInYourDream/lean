@@ -98,7 +98,7 @@ impl<Iter> ProgressIteratorExt for Iter {
     }
 }
 
-fn expensive_caculation<T>(_n: &T) {
+fn expensive_calculation<T>(_n: &T) {
     sleep(Duration::from_secs(1))
 }
 
@@ -108,12 +108,12 @@ mod test {
     fn test_progress() {
         use super::*;
         for n in (0..3).progress() {
-            expensive_caculation(&n)
+            expensive_calculation(&n)
         }
 
         // let v = vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         // for n in v.iter().progress().with_bound().with_delimiter('<', '>') {
-        //     expensive_caculation(n);
+        //     expensive_calculation(n);
         // }
     }
 }

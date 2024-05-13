@@ -1,11 +1,11 @@
 #[derive(Debug)]
-pub struct StrSplit<'heystack, D> {
-    reminder: Option<&'heystack str>,
+pub struct StrSplit<'haystack, D> {
+    reminder: Option<&'haystack str>,
     delimiter: D,
 }
 
-impl<'heystack, D> StrSplit<'heystack, D> {
-    pub fn new(haystack: &'heystack str, delimiter: D) -> Self {
+impl<'haystack, D> StrSplit<'haystack, D> {
+    pub fn new(haystack: &'haystack str, delimiter: D) -> Self {
         Self {
             reminder: Some(haystack),
             delimiter,
@@ -13,15 +13,15 @@ impl<'heystack, D> StrSplit<'heystack, D> {
     }
 }
 
-impl<'heystack, D> Iterator for StrSplit<'heystack, D>
+impl<'haystack, D> Iterator for StrSplit<'haystack, D>
 where
     D: Delimiter,
 {
-    type Item = &'heystack str;
+    type Item = &'haystack str;
     fn next(&mut self) -> Option<Self::Item> {
         let reminder = self.reminder.as_mut()?;
-        if let Some((delimter_start, delimiter_end)) = self.delimiter.find_next(reminder) {
-            let until_delimiter = &reminder[..delimter_start];
+        if let Some((delimiter_start, delimiter_end)) = self.delimiter.find_next(reminder) {
+            let until_delimiter = &reminder[..delimiter_start];
             *reminder = &reminder[delimiter_end..];
             Some(until_delimiter)
         } else {
@@ -42,7 +42,7 @@ impl Delimiter for &str {
 
 impl Delimiter for char {
     fn find_next(&self, s: &str) -> Option<(usize, usize)> {
-        // charactar char only have 1 lang
+        // character char only have 1 lang
         s.char_indices()
             .find(|(_, c)| c == self)
             .map(|(start, _)| (start, self.len_utf8()))

@@ -73,13 +73,13 @@ impl<T: Hash + PartialEq + Eq + Copy> GraphAdjList<T> {
     }
 }
 
-pub fn gragh_bfs<T>(graph: GraphAdjList<T>, start_vertex: T) -> Vec<T>
+pub fn graph_bfs<T>(graph: GraphAdjList<T>, start_vertex: T) -> Vec<T>
 where
     T: Hash + PartialEq + Copy + Eq,
 {
     let mut res = vec![];
-    let mut visted = HashSet::new();
-    visted.insert(start_vertex);
+    let mut visited = HashSet::new();
+    visited.insert(start_vertex);
 
     let mut queue = VecDeque::new();
     queue.push_back(start_vertex);
@@ -90,11 +90,11 @@ where
 
         if let Some(adj_vets) = graph.adj_list.get(&vertex) {
             for &adj_vet in adj_vets {
-                if visted.contains(&adj_vet) {
+                if visited.contains(&adj_vet) {
                     continue;
                 }
                 queue.push_back(adj_vet);
-                visted.insert(adj_vet);
+                visited.insert(adj_vet);
             }
         }
     }
@@ -107,24 +107,24 @@ where
     T: Hash + PartialEq + Copy + Eq,
 {
     let mut result = vec![];
-    let mut visted = HashSet::new();
-    dfs(&graph, &mut visted, &mut result, start_vertex);
+    let mut visited = HashSet::new();
+    dfs(&graph, &mut visited, &mut result, start_vertex);
     result
 }
 
-fn dfs<T>(graph: &GraphAdjList<T>, visted: &mut HashSet<T>, result: &mut Vec<T>, vertex: T)
+fn dfs<T>(graph: &GraphAdjList<T>, visited: &mut HashSet<T>, result: &mut Vec<T>, vertex: T)
 where
     T: Hash + PartialEq + Copy + Eq,
 {
     result.push(vertex);
-    visted.insert(vertex);
+    visited.insert(vertex);
 
     if let Some(adj_vets) = graph.adj_list.get(&vertex) {
         for &adj_vet in adj_vets {
-            if visted.contains(&adj_vet) {
+            if visited.contains(&adj_vet) {
                 continue;
             }
-            dfs(graph, visted, result, adj_vet);
+            dfs(graph, visited, result, adj_vet);
         }
     }
 }

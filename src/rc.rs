@@ -5,10 +5,10 @@ use std::ptr::NonNull;
 
 struct RcInner<T> {
     value: T,
-    refconter: Cell<isize>,
+    refcounter: Cell<isize>,
 }
 
-// 不能直接在 Rc中保存计数的原因是 当clone Rc 相当于每个副本都有一个 conter
+// 不能直接在 Rc中保存计数的原因是 当clone Rc 相当于每个副本都有一个 counter
 // 那我们如何之后一个 Rc对象被 clone被引用了多少次呢
 struct Rc<T> {
     inner: NonNull<RcInner<T>>,
@@ -19,7 +19,7 @@ impl<T> Rc<T> {
     pub fn new(value: T) -> Self {
         let inner = Box::new(RcInner {
             value,
-            refconter: Cell::new(1),
+            refcounter: Cell::new(1),
         });
 
         // 下面这么写 当我们结束这个方法 Box被回收 inner指针也没有了
@@ -30,7 +30,7 @@ impl<T> Rc<T> {
 
         // Box::into_raw(inner) 将 Box 中的数据移动到堆内存，并返回一个原始指针。这样，即使 Box 被回收，数据仍然存在于堆内存中，可以通过原始指针访问
         Rc {
-            // SAFETY: Box doesnot give as a null pointer
+            // SAFETY: Box does not give as a null pointer
             inner: unsafe { NonNull::new_unchecked(Box::into_raw(inner)) },
             _marker: PhantomData,
         }
@@ -50,8 +50,8 @@ impl<T> Deref for Rc<T> {
 impl<T> Clone for Rc<T> {
     fn clone(&self) -> Self {
         let inner = unsafe { self.inner.as_ref() };
-        let c = inner.refconter.get();
-        inner.refconter.set(c + 1);
+        let c = inner.refcounter.get();
+        inner.refcounter.set(c + 1);
         Rc {
             inner: self.inner,
             _marker: PhantomData,
@@ -62,14 +62,14 @@ impl<T> Clone for Rc<T> {
 impl<T> Drop for Rc<T> {
     fn drop(&mut self) {
         let inner = unsafe { self.inner.as_ref() };
-        let c = inner.refconter.get();
+        let c = inner.refcounter.get();
         if c == 1 {
-            // SAFETY: we are the only Rc left, so we are being droped
+            // SAFETY: we are the only Rc left, so we are being dropped
             // there for after us, there will be no Rc's and no reference to T
             let _ = unsafe { Box::from_raw(self.inner.as_ptr()) };
         } else {
             // there are other Rc's left, so we just decrement the refcount
-            inner.refconter.set(c - 1);
+            inner.refcounter.set(c - 1);
         }
     }
 }
