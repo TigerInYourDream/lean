@@ -55,9 +55,18 @@ pub fn until_char(s: &str, c: char) -> &str {
         .expect("StrSplit always gives at least one result")
 }
 
+// cnanot compile in earyly version please look at longest_test in test mod
+pub fn longest<'a>(s1: &'a str, s2: &'a str) -> &'a str {
+    if s1.len() > s2.len() {
+        s1
+    } else {
+        s2
+    }
+}
+
 #[cfg(test)]
 mod test {
-    use crate::{until_char, StrSplit};
+    use crate::{longest, until_char, StrSplit};
 
     #[test]
     fn test() {
@@ -76,5 +85,15 @@ mod test {
     #[test]
     fn test_util() {
         assert_eq!(until_char("hello world", 'o'), "hell");
+    }
+
+    #[test]
+    fn test_longest() {
+        let string1 = "hello world string 1 long".to_string();
+        {
+            let string2 = "hello world string 2".to_string();
+            let res = longest(&string1, &string2);
+            println!("res: {}", res);
+        }
     }
 }
