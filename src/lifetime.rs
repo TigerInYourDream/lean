@@ -54,7 +54,6 @@ pub fn until_char(s: &str, c: char) -> &str {
         .next()
         .expect("StrSplit always gives at least one result")
 }
-
 // cnanot compile in earyly version please look at longest_test in test mod
 pub fn longest<'a>(s1: &'a str, s2: &'a str) -> &'a str {
     if s1.len() > s2.len() {
