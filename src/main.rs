@@ -10,15 +10,20 @@ struct TradePlan {
     trade_amount: i32,
 }
 
-fn calculate_trade_plan(current_holdings: &HashMap<String, i32>, target_holdings: &HashMap<String, i32>) -> Vec<TradePlan> {
-    let mut all_stocks: Vec<String> = current_holdings.keys().chain(target_holdings.keys()).cloned().collect();
+fn calculate_trade_plan(current_holdings: Vec<(String, i32)>, target_holdings: Vec<(String, i32)>) -> Vec<TradePlan> {
+    let current_holdings : HashMap<String, i32> = current_holdings.iter().cloned().collect();
+    let target_holdings : HashMap<String, i32> = target_holdings.iter().cloned().collect();
+
+    let mut all_stocks: Vec<&String> = current_holdings.iter().map(|x| x.0)
+    .chain(target_holdings.iter().map(|x| x.0))
+    .collect();
     all_stocks.sort_unstable();
     all_stocks.dedup();
 
     let mut trade_plans: Vec<TradePlan> = all_stocks.into_iter()
         .map(|stock| {
-            let current = current_holdings.get(&stock).copied().unwrap_or(0);
-            let target = target_holdings.get(&stock).copied().unwrap_or(0);
+            let current = current_holdings.get(stock).copied().unwrap_or(0);
+            let target = target_holdings.get(stock).copied().unwrap_or(0);
             let difference = target - current;
 
             let action = match difference.cmp(&0) {
@@ -28,7 +33,7 @@ fn calculate_trade_plan(current_holdings: &HashMap<String, i32>, target_holdings
             }.to_string();
 
             TradePlan {
-                stock,
+                stock: stock.to_string(),
                 current_holding: current,
                 target_holding: target,
                 difference,
@@ -48,20 +53,20 @@ fn calculate_trade_plan(current_holdings: &HashMap<String, i32>, target_holdings
 }
 
 fn main() {
-    let current_holdings: HashMap<String, i32> = [
+    let current_holdings: Vec<(String, i32)> = [
         ("AAPL", 100),
         ("GOOGL", 50),
         ("MSFT", 75),
     ].iter().map(|&(k, v)| (k.to_string(), v)).collect();
 
-    let target_holdings: HashMap<String, i32> = [
+    let target_holdings: Vec<(String, i32)> = [
         ("AAPL", 150),
         ("GOOGL", 0),
         ("MSFT", 100),
         ("AMZN", 25),
     ].iter().map(|&(k, v)| (k.to_string(), v)).collect();
 
-    let plan = calculate_trade_plan(&current_holdings, &target_holdings);
+    let plan = calculate_trade_plan(current_holdings, target_holdings);
 
     println!("{:<10} {:<15} {:<15} {:<10} {:<10} {:<10}", "股票", "当前持仓", "目标持仓", "差额", "操作", "交易数量");
     for trade in plan {
